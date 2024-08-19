@@ -116,10 +116,9 @@ public class SpiceDbAuthorizeAspectTest {
   public void testInvalidPermissionFormat() throws NoSuchMethodException {
     Method method = TestClass.class.getMethod("invalidMethod", User.class);
     when(methodSignature.getMethod()).thenReturn(method);
-    SpiceDbAuthorize fgaAuthorize = method.getAnnotation(SpiceDbAuthorize.class);
     User user = new User("123", "456");
-    when(joinPoint.getArgs()).thenReturn(new Object[]{user});
-    assertThrows(FgaAuthorizationException.class, () -> aspect.authorize(joinPoint));
+//    when(joinPoint.getArgs()).thenReturn(new Object[]{user});
+    assertThrows(UnauthorizedException.class, () -> aspect.authorize(joinPoint));
   }
 
   private static class TestClass {

@@ -1,7 +1,6 @@
 plugins {
     id 'java-library'
     id 'maven-publish'
-    id 'org.springframework.boot' version '3.3.0'
     id 'io.spring.dependency-management' version '1.1.6'
 }
 
@@ -13,12 +12,12 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-aop'
+    implementation 'org.springframework.boot:spring-boot-starter-aop:3.3.0'
     implementation 'com.authzed.api:authzed:0.9.0'
     implementation 'io.grpc:grpc-protobuf:1.65.1'
     implementation 'io.grpc:grpc-stub:1.65.1'
 
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test:3.3.0'
     testImplementation 'org.mockito:mockito-core:3.12.4'
     testImplementation 'io.grpc:grpc-testing:1.65.1'
     testImplementation 'io.grpc:grpc-inprocess:1.65.1'
@@ -29,6 +28,11 @@ test {
 }
 
 publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
     repositories {
         maven {
             name = "GitHubPackages"
@@ -38,5 +42,12 @@ publishing {
                 password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
             }
         }
+    }
+}
+
+task printCredentials {
+    doLast {
+        println "Username: ${project.findProperty("gpr.user") ?: System.getenv("USERNAME")}"
+        println "Password: ${project.findProperty("gpr.key") ?: System.getenv("TOKEN")}"
     }
 }
